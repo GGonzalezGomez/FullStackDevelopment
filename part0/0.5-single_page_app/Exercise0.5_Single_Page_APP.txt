@@ -1,0 +1,10 @@
+title Exercise 0.5: Single Page APP
+
+Browser->Server: HTTP GET /spa
+Server->Browser: HTML Code
+Browser->Server: HTTP GET /main.css
+Server->Browser: main.css
+Browser->Server: HTTP GET /spa.js
+Server->Browser: main.js
+Browser->Server: HTTP GET /data.json
+Server->Browser: data.json

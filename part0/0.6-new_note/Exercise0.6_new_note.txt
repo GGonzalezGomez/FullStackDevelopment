@@ -1,0 +1,6 @@
+title Exercise 0.6: new note
+
+note left of Browser: User inputs note and clicks "submit" button
+note right of Server: New note is added to local notes array and sent to server
+Browser->Server: HTTP POST /new_note_spa
+Server->Browser: {"message": "note created"}

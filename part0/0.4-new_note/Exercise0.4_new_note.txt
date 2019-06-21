@@ -1,0 +1,14 @@
+title Exercise 0.4: new note
+
+note left of Browser: User inputs note and clicks "submit" button
+Browser->Server: HTTP POST /new_note
+note right of Server: New note is stored on server data
+Server->Browser: Redirect /notes
+Browser->Server: HTTP GET /notes
+Server->Browser: HTML Code
+Browser->Server: HTTP GET /main.css
+Server->Browser: main.css
+Browser->Server: HTTP GET /main.js
+Server->Browser: main.js
+Browser->Server: HTTP GET /data.json
+Server->Browser: data.json
