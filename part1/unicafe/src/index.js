@@ -14,12 +14,16 @@ const Statistics = ({good,neutral,bad,all,avg,pos}) => {
      return(
         <div>
                 <h2>statistics</h2>
-	        <Statistic text="good" value={good} />
-                <Statistic text="neutral" value={neutral} />
-	        <Statistic text="bad" value={bad} />
-                <Statistic text="all" value={all} />
-                <Statistic text="average" value={avg} />
-                <Statistic text="positive" value={pos} />
+	        <table>
+	          <tbody>
+	          <Statistic text="good" value={good} />
+                  <Statistic text="neutral" value={neutral} />
+	          <Statistic text="bad" value={bad} />
+                  <Statistic text="all" value={all} />
+                  <Statistic text="average" value={avg} />
+                  <Statistic text="positive" value={pos} />
+	     	  </tbody>
+	        </table>
         </div>
      )
   }
@@ -28,11 +32,15 @@ const Statistics = ({good,neutral,bad,all,avg,pos}) => {
 const Statistic = ({text, value}) => {
   if(text === "positive"){
   	return(
-		<p>{text} {value} %</p>
+		<tr>
+		  <td>{text}</td><td>{value} %</td>
+		</tr>
 	)}
   else {
 	return(
-		<p>{text} {value}</p>
+		<tr>
+		  <td>{text}</td><td>{value}</td>
+		</tr>
 	)
   }
 }
