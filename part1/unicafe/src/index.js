@@ -1,17 +1,28 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Statistics = ({good,neutral,bad,all,avg,pos}) => { 
-  return(
-  <div>
-    <h2>statistics</h2>
-    <p>good {good}</p>
-    <p>neutral {neutral}</p>
-    <p>all {all}</p>
-    <p>average {avg}</p>
-    <p>positive {pos} %</p>
-  </div>
-  )
+const Statistics = ({good,neutral,bad,all,avg,pos}) => {
+   if( all === 0 ) {
+     return(
+        <div>
+                <h2>statistics</h2>
+                <p>No feedback given</p>
+        </div>
+      )
+  }
+  else {
+     return(
+        <div>
+                <h2>statistics</h2>
+                <p>good {good}</p>
+                <p>neutral {neutral}</p>
+	        <p>bad {bad}</p>
+                <p>all {all}</p>
+                <p>average {avg}</p>
+                <p>positive {pos} %</p>
+        </div>
+     )
+  }
 }
 
 const Button = ({clickFunction, text}) => ( 
