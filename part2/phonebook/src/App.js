@@ -11,10 +11,14 @@ const App = () => {
   const addNumber = (event) => {
 	  event.preventDefault()
 	  if(newName !== ''){
-		var copy = [...persons]
-		copy.push({'name': newName})
-		setPersons(copy)
-		setNewName('')
+		if (persons.filter( function(p){return p.name === newName }).length >0 )
+		  window.alert(`${newName} is already added to phonebook`)
+		else {
+		  var copy = [...persons]
+		  copy.push({'name': newName})
+		  setPersons(copy)
+		  setNewName('')
+		}
 	  }
   }
 
