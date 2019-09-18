@@ -16,9 +16,7 @@ const Part = (props) => {
 const Content = (props) => props.course.parts.map(part =><Part part={part} key={part.id} />)
 
 const Total = (props) => {
-	var amt=0
-	console.log(props)
-	props.course.parts.map( obj => amt += obj.exercises  )
+	var amt=props.course.parts.reduce(function(t,n){return t+n.exercises},0)
 	return (
 		<p>total of {amt} exercises</p>
 	)
