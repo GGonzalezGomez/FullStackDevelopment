@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Numbers from './Numbers'
+import Filter from './Filter'
 
 
 const App = () => {
@@ -34,7 +35,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <Filter persons={persons} />
+      <h2>add a new</h2>
       <form onSubmit={addNumber}>
         <div>
           name: <input value={newName} onChange={handleInputChange} />
