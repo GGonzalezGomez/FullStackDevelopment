@@ -1,4 +1,7 @@
 import React, { useState } from 'react'
+import Numbers from './Numbers'
+import Filter from './Filter'
+import Person from './Person'
 
 const App = (props) => {
   const [ persons, setPersons] = useState([
@@ -14,7 +17,7 @@ const App = (props) => {
   const addNumber = (event) => {
 	  event.preventDefault()
 	  if(newName !== '' && newNumber !== '' ){
-		if (persons.filter( function(p){return p.name === newName }).length >0 )
+		if (persons.filter( function(p){return p.name.toLowerCase() === newName.toLowerCase() }).length >0 )
 		  window.alert(`${newName} is already added to phonebook`)
 		else {
 		  var copy = [...persons]
@@ -34,47 +37,17 @@ const App = (props) => {
 	  setNewNumber(event.target.value)
   }
   
-  const handleFilterChange = (event) => {
-          setFilter(event.target.value)
+  const handleFilter = (event) => {
+	  setFilter(event.target.value)
   }
-
-  const Person = ({p}) => {
-        return(
-                <p>{p.name} {p.number}</p>
-        )
-  }
-
-  const Printpersons = ({persons}) => persons.map(p => <Person p={p} key={p.name} />)
-
-  const Numbers = ({persons}) => {
-    //console.log(persons)
-    return (
-      <div>
-        <h2>Numbers</h2>
-        <Printpersons persons={persons} />
-      </div>
-    )
-  }
-
-
+ 
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with: <input value={newFilter} onChange={handleFilterChange} />
-      </div>
+      <Filter changeFunction={handleFilter} filtervalue={newFilter} />
       <h2>add a new</h2>
-      <form onSubmit={addNumber}>
-        <div>
-          name: <input value={newName} onChange={handleInputChange} />
-        </div>
-	<div>
-	  number: <input value={newNumber} onChange={handleNumberChange} />
-	</div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <Person nameValue={newName} nameChange={handleInputChange} numValue={newNumber} numChange={handleNumberChange} submitPerson={addNumber} />
+      <h2>Numbers</h2>
       <Numbers persons={persons.filter(person => person.name.match(RegExp("^"+newFilter+".*","i")))} />
     </div>
   )
