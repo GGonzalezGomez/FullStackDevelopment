@@ -13,22 +13,13 @@ const Country = (props) => {
 	if(props.countries.length>1)
     		return (
       			<div>
-        			<Printcountries countries={props.countries} />
+        			<Printcountries countries={props.countries} handleFunction={props.clickFunction}/>
       			</div>
     		)
 	else {
 		if(props.countries.length===1)
 			return (
-				<div>
-					<h2>{props.countries[0].name}</h2>
-					<p>capital {props.countries[0].capital}</p>
-					<p>population {props.countries[0].population}</p>
-					<h3>languages</h3>
-					<ul>
-					{props.countries[0].languages.map(lang => <SingleCountry lang={lang} key={lang.name} />)}
-					</ul>
-					<img src={props.countries[0].flag} alt={props.countries[0].name} />
-				</div>
+				<Singlecountry country={props.countries[0]} />
 			)
 		else
 			return (
@@ -36,22 +27,35 @@ const Country = (props) => {
 					<p>No country matches the filter</p>
 				</div>
 			)
-	}
+		}
     }
 }
 
-const SingleCountry = (props) => {
+const Languages = (props) => {
 	return(
 		<li>{props.lang.name}</li>
 	)
 }
 
-const Countrydetails = ({p}) => {
+const Singlecountry = (props) => {
+	return(
+		<div>
+			<h2>{props.country.name}</h2>
+			<p>capital {props.country.capital}</p>
+			<p>population {props.country.population}</p>
+			<h3>languages</h3>
+			<ul> {props.country.languages.map(lang => <Languages lang={lang} key={lang.name} />)} </ul>
+			<img src={props.country.flag} alt={props.country.name} />
+		</div>
+	)
+}
+
+const Countrydetails = (props) => {
         return(
-                <p>{p.name}</p>
+                <p>{props.p.name} <button id={props.p.name} onClick={props.fun}>show</button></p>
         )
 }
 
-const Printcountries = ({countries}) => countries.map(p => <Countrydetails p={p} key={p.name} />)
+const Printcountries = (props) => props.countries.map(p => <Countrydetails p={p} key={p.name} fun={props.handleFunction}/>)
 
 export default Country

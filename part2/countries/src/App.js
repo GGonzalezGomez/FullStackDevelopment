@@ -21,11 +21,16 @@ const App = (props) => {
   const handleFilter = (event) => {
 	  setFilter(event.target.value)
   }
+
+  const handleShow = (e) => {
+    setFilter(e.target.id)
+  }
+
 console.log(newFilter)
   return (
     <div>
       <Filter changeFunction={handleFilter} filtervalue={newFilter} />
-      <Country countries={countries.filter(country => country.name.match(RegExp(".*"+newFilter+".*","i")))} />
+      <Country countries={countries.filter(country => country.name.match(RegExp(".*"+newFilter+".*","i")))} clickFunction={handleShow} />
     </div>
   )
 }
