@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useEffect }  from 'react'
 
 const Country = (props) => {
-    console.log(props)
     if(props.countries.length>10){
 	    return (
 		    <div>
@@ -19,7 +18,7 @@ const Country = (props) => {
 	else {
 		if(props.countries.length===1)
 			return (
-				<Singlecountry country={props.countries[0]} />
+				<Singlecountry country={props.countries[0]} hook={props.hook} weather={props.weather} />
 			)
 		else
 			return (
@@ -37,7 +36,19 @@ const Languages = (props) => {
 	)
 }
 
+const Weather = (props) => {
+	return (
+		<div>
+			<h3>Weather in {props.country.capital}</h3>
+			<p>temperature: {props.weather.temperature} Celsius </p>
+			<img src={props.weather.weather_icons} alt={props.country.capital} />
+			<p>wind: {props.weather.wind_speed} kph direction {props.weather.wind_dir}</p>
+		</div>
+	)
+}
+
 const Singlecountry = (props) => {
+	useEffect(props.hook,[])
 	return(
 		<div>
 			<h2>{props.country.name}</h2>
@@ -46,6 +57,7 @@ const Singlecountry = (props) => {
 			<h3>languages</h3>
 			<ul> {props.country.languages.map(lang => <Languages lang={lang} key={lang.name} />)} </ul>
 			<img src={props.country.flag} alt={props.country.name} />
+			<Weather country={props.country} weather={props.weather} />
 		</div>
 	)
 }
