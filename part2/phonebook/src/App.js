@@ -24,15 +24,20 @@ const App = (props) => {
   const addNumber = (event) => {
 	  event.preventDefault()
 	  if(newName !== '' && newNumber !== '' ){
-		if (persons.filter( function(p){return p.name.toLowerCase() === newName.toLowerCase() }).length >0 )
-		  window.alert(`${newName} is already added to phonebook`)
-		else {
-		  var copy = [...persons]
-		  copy.push({name: newName, number: newNumber})
-		  setPersons(copy)
-		  setNewName('')
-		  setNewNumber('')
-		}
+		  if (persons.filter( function(p){return p.name.toLowerCase() === newName.toLowerCase() }).length >0 )
+		    window.alert(`${newName} is already added to phonebook`)
+		  else {
+		    var copy = [...persons]
+		    copy.push({name: newName, number: newNumber})
+        axios
+          .post('http://localhost:3001/persons',{name: newName, number: newNumber})
+          .then(response=> {
+            setPersons(copy)
+            setNewName('')
+            setNewNumber('')
+            }
+          )
+		  }
 	  }
   }
 
