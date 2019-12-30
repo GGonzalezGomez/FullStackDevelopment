@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Numbers from './Numbers'
 import Filter from './Filter'
 import Person from './Person'
+import Comm from './Comm'
 
 const App = (props) => {
   const [ persons, setPersons] = useState([]) 
@@ -12,10 +12,9 @@ const App = (props) => {
 
   const effectHook = () => {
 	  console.log("Running Effect Hook")
-	  axios
-	    .get('http://192.168.1.32:3001/persons').then(response => {
-		    console.log('Response received')
-		    setPersons(response.data)
+	  Comm.getAll().then(contactsData => {
+		console.log('Response received')
+		setPersons(contactsData)
 	    })
   }
 
@@ -29,14 +28,12 @@ const App = (props) => {
 		  else {
 		    var copy = [...persons]
 		    copy.push({name: newName, number: newNumber})
-        axios
-          .post('http://192.168.1.32:3001/persons',{name: newName, number: newNumber})
-          .then(response=> {
-            setPersons(copy)
-            setNewName('')
-            setNewNumber('')
-            }
-          )
+        	    Comm.create({name: newName, number: newNumber}).then(response => {
+            		setPersons(copy)
+            		setNewName('')
+            		setNewNumber('')
+            	    }
+          	   )
 		  }
 	  }
   }
