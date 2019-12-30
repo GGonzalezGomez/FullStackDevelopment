@@ -13,7 +13,7 @@ const App = (props) => {
   const effectHook = () => {
 	  console.log("Running Effect Hook")
 	  axios
-	    .get('http://localhost:3001/persons').then(response => {
+	    .get('http://192.168.1.32:3001/persons').then(response => {
 		    console.log('Response received')
 		    setPersons(response.data)
 	    })
@@ -30,7 +30,7 @@ const App = (props) => {
 		    var copy = [...persons]
 		    copy.push({name: newName, number: newNumber})
         axios
-          .post('http://localhost:3001/persons',{name: newName, number: newNumber})
+          .post('http://192.168.1.32:3001/persons',{name: newName, number: newNumber})
           .then(response=> {
             setPersons(copy)
             setNewName('')
