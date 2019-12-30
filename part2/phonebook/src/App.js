@@ -49,6 +49,24 @@ const App = (props) => {
   const handleFilter = (event) => {
 	  setFilter(event.target.value)
   }
+
+  const handleDelete = (event) => {
+	  console.log('Delete contact')
+	  var contactToDelete = persons.filter((p) => p.id===parseInt(event.target.id))
+	  console.log(event.target.id)
+	  console.log(contactToDelete)
+	  if(window.confirm('Delete ' + contactToDelete[0].name + '?')) {
+		  var copy = persons.filter( (p) => p.id!==parseInt(event.target.id))
+		  Comm.delContact(contactToDelete[0].id).then(response => {
+			  setPersons(copy)
+			  setNewName('')
+			  setNewNumber('')
+		  	  })
+	  }
+	  else {
+		  console.log('Deletion canceled')
+	  }
+  }
  
   return (
     <div>
@@ -57,7 +75,7 @@ const App = (props) => {
       <h2>add a new</h2>
       <Person nameValue={newName} nameChange={handleInputChange} numValue={newNumber} numChange={handleNumberChange} submitPerson={addNumber} />
       <h2>Numbers</h2>
-      <Numbers persons={persons.filter(person => person.name.match(RegExp("^"+newFilter+".*","i")))} />
+      <Numbers persons={persons.filter(person => person.name.match(RegExp("^"+newFilter+".*","i")))} deleteContact={handleDelete} />
     </div>
   )
 }
