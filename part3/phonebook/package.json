@@ -1,0 +1,31 @@
+{
+  "name": "phonebackend",
+  "version": "1.0.0",
+  "description": "3.1: Phonebook backend part1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js",
+    "watch": "nodemon ./src/index.js",
+    "test": "echo \"Error: No test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GGonzalezGomez/FullStackDevelopment.git"
+  },
+  "keywords": [
+    "FullStack",
+    "Backend"
+  ],
+  "author": "Guillermo Gonzalez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GGonzalezGomez/FullStackDevelopment/issues"
+  },
+  "homepage": "https://github.com/GGonzalezGomez/FullStackDevelopment#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
