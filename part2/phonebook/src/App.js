@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react'
+import './index.css'
 import Numbers from './Numbers'
 import Filter from './Filter'
 import Person from './Person'
 import Comm from './Comm'
+import Notification from './Notification'
 
 const App = (props) => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [ newFilter, setFilter ] = useState('')
+  const [ notmsg, setNotificationMessage ] = useState({"message": null, "type": "errornotification"})
 
   const effectHook = () => {
 	  console.log("Running Effect Hook")
@@ -41,6 +44,12 @@ const App = (props) => {
 			    setNewName('')
 			    setNewNumber('')
 		    	})
+			.then( () => {
+                        	setNotificationMessage({"message": `Contact '${newName}' has been updated`, "type": "notification"})
+                        	setTimeout( () => {
+                                	setNotificationMessage({"message": null, "type": "errornotification"})
+                        	},3000)
+                    	})
 		    }
 		    else {
 			    setNewName('')
@@ -56,6 +65,12 @@ const App = (props) => {
             		setNewName('')
             		setNewNumber('')
             	    })
+		    .then( () => {
+                    	setNotificationMessage({"message": `Contact '${newName}' has been created`, "type": "notification"})
+                        setTimeout( () => {
+                        	setNotificationMessage({"message": null, "type": "errornotification"})
+                        },3000)
+                    })
 		  }
 	  }
   }
@@ -78,16 +93,32 @@ const App = (props) => {
 	  	if(window.confirm('Delete ' + contactToDelete[0].name + '?')) {
 		  var copy = persons.filter( (p) => p.id!==parseInt(event.target.id))
 		  Comm.delContact(contactToDelete[0].id).then(response => {
-			  setPersons(copy)
 			  setNewName('')
 			  setNewNumber('')
+			  //setPersons(copy)
 		  	  })
+			  .then( () => {
+                                  setNotificationMessage({"message": `Contact '${contactToDelete[0].name}' has been deleted`, "type": "notification"})
+                                  setTimeout( () => {
+                                          setNotificationMessage({"message": null, "type": "errornotification"})
+                                  },3000)
+                          })
+			  .catch(error => {
+				  setNotificationMessage({"message": `Information of '${contactToDelete[0].name}' has already been removed from server`, "type": "errornotification"})
+				  setTimeout( () => {
+					  setNotificationMessage({"message": null, "type": "errornotification"})
+				  },3000)
+			  })
+			  .finally( () => {
+				  setPersons(copy)
+			  })
 	  	}
 	  }
   }
  
   return (
     <div>
+      <Notification message={notmsg.message} type={notmsg.type} />
       <h2>Phonebook</h2>
       <Filter changeFunction={handleFilter} filtervalue={newFilter} />
       <h2>add a new</h2>
