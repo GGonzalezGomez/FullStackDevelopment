@@ -1,8 +1,22 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
+
+morgan.token('postRequest', function(req, res) {
+        if(req.method === 'POST')
+                return JSON.stringify(req.body)
+        else
+                return ' '
+})
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'Endpoint not found' })
+}
 
 app.use(bodyParser.json())
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postRequest'))
+
 
 let persons = [
   {
@@ -35,21 +49,6 @@ app.get('/api/persons', (req, res) => {
   res.json(persons)
 })
 
-app.post('/api/persons', (req, res) => {
-  const body = req.body
-
-  if(!body.name || !body.number){
-	  return res.status(400).json({error: 'content missing'})
-  }
-  
-  if(persons.filter(person => person.name === body.name).length != 0) {
-	  return res.status(400).json({error: 'name must be unique'})
-  }
-
-  body.id = Math.ceil(Math.random()*100000)
-  persons = persons.concat(body)
-  res.json(body)
-})
 
 app.get('/api/persons/:id', (request, response) => {
   const id = request.params.id
@@ -78,6 +77,24 @@ app.delete('/api/persons/:id', (request, response) => {
 app.get('/info', (request, response) => {
   response.send('<div><p>Phonebook has info for ' + persons.length + ' people</p><p>' + Date() + '</p></div>')
 })
+
+
+app.post('/api/persons', (req, res) => {
+
+  if(!req.body.name || !req.body.number){
+          return res.status(400).json({error: 'content missing'})
+  }
+
+  if(persons.filter(person => person.name === req.body.name).length != 0) {
+          return res.status(400).json({error: 'name must be unique'})
+  }
+
+  var newPerson = {"name": req.body.name, "number": req.body.number, "id": Math.ceil(Math.random()*100000)}
+  persons = persons.concat(newPerson)
+  res.json(newPerson)
+})
+
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
