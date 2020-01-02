@@ -2,9 +2,10 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
+const cors = require('cors')
 
 morgan.token('postRequest', function(req, res) {
-        if(req.method === 'POST')
+        if(req.method === 'POST' || req.method === 'PUT')
                 return JSON.stringify(req.body)
         else
                 return ' '
@@ -14,6 +15,7 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'Endpoint not found' })
 }
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postRequest'))
 
@@ -64,6 +66,26 @@ app.get('/api/persons/:id', (request, response) => {
     console.log(id+' not found')
     response.status(404).end()
   }
+
+})
+
+app.put('/api/persons/:id', (request, response) => {
+  const id = request.params.id
+  if(!request.body.number){
+          return response.status(400).json({error: 'content missing'})
+  }
+
+  if(persons.filter(person => person.id === parseInt(id)).length === 0) {
+          return response.status(400).json({error: 'Contact not found'})
+  }
+
+  persons = persons.map( p => {
+	  if(p.id === parseInt(id))
+	    return({"name": request.body.name, "number": request.body.number, "id": p.id})
+	  else
+	    return({"name": p.name, "number": p.number, "id": p.id})
+    })
+  response.status(204).end()
 
 })
 
