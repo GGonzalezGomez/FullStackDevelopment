@@ -1,8 +1,11 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('../models/Person')
+
 
 morgan.token('postRequest', function(req, res) {
         if(req.method === 'POST' || req.method === 'PUT')
@@ -49,7 +52,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then(people => {
+    res.json(people.map(p => p.toJSON() ))
+  })
 })
 
 
