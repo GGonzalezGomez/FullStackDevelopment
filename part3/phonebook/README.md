@@ -4,4 +4,4 @@
 
 For more info on this course, please visit the FullStack open course on [Web link](https://fullstackopen.com/en/part3/deploying_app_to_internet)
 
-The application has been deployed on Heroku and can be reached on the [following link](https://glacial-badlands-79242.herokuapp.com)
+The application has been deployed on Heroku and can be reached on the [following link](https://still-beyond-53017.herokuapp.com/)
