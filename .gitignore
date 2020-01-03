@@ -1,1 +1,2 @@
-./part3/phonebook/node_modules
+./part3/phonebook/node_modules/*
+./part3/phonebook/.env
