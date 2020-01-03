@@ -39,7 +39,7 @@ const App = (props) => {
 			    }
 		    	})
 		    	
-			Comm.update(contactInfo.id, contactInfo).then(response => {
+			Comm.update(contactInfo.id, {"name": contactInfo.name, "number": contactInfo.number}).then(response => {
 			    setPersons(newCopy)
 			    setNewName('')
 			    setNewNumber('')
@@ -58,9 +58,10 @@ const App = (props) => {
 		  }
 		  else {
 		    var copy = [...persons]
-		    var currMaxId = Math.max.apply(Math, copy.map((p) => p.id))
-		    copy.push({name: newName, number: newNumber, id: currMaxId+1})
-        	    Comm.create({name: newName, number: newNumber,id: currMaxId+1}).then(response => {
+		    //var currMaxId = Math.max.apply(Math, copy.map((p) => p.id))
+		    //copy.push({name: newName, number: newNumber, id: currMaxId+1})
+        	    Comm.create({name: newName, number: newNumber}).then(response => {
+			copy.push({name: newName, number: newNumber, id: response.id})
             		setPersons(copy)
             		setNewName('')
             		setNewNumber('')
