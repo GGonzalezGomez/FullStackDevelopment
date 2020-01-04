@@ -14,11 +14,6 @@ morgan.token('postRequest', function(req, res) {
     return ' '
 })
 
-// Handling not found endpoints
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'Endpoint not found' })
-}
-
 app.use(express.static('build'))
 app.use(cors())
 app.use(bodyParser.json())
@@ -30,14 +25,17 @@ app.get('/', (req, res) => {
 })
 
 // API: Listing all contacts
-app.get('/api/persons', (req, res) => {
+app.get('/api/persons', (req, res, next) => {
   Person.find({}).then(people => {
     res.json(people.map(p => p.toJSON() ))
+  })
+  .catch(error => {
+    next(error)
   })
 })
 
 // API: Listing a specific contact
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   Person.findById(id)
     .then(person => {
@@ -45,42 +43,56 @@ app.get('/api/persons/:id', (request, response) => {
         response.json(person.toJSON())
       }
       else {
-        console.log(id+' not found')
         response.status(404).end() 
       }
+    })
+    .catch(error => {
+      next(error)
     })
 })
 
 // API: Updating specific contact
-app.put('/api/persons/:id', (request, response) => {
+app.put('/api/persons/:id', (request, response, next) => {
   if(!request.body.number){
           return response.status(400).json({error: 'content missing'})
   }
 
   Person.findByIdAndUpdate(request.params.id,{"name": request.body.name, "number": request.body.number})
     .then(result => {
-      response.json(result.toJSON())
+      if(result)
+        response.json(result.toJSON())
+      else
+        response.status(404).end()
+    })
+    .catch(error => {
+      next(error)
     })
 })
 
 // API: Deleting specific contact
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
   const id = request.params.id
   Person.findByIdAndRemove(id)
     .then(result => {
       response.status(204).end()
     })
+    .catch(error => {
+      next(error)
+    })
 })
 
 // Phonebook info
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   Person.find({}).then(people => {    
     response.send('<div><p>Phonebook has info for ' + people.length + ' people</p><p>' + Date() + '</p></div>')
+  })
+  .catch(error => {
+    next(error)
   })
 })
 
 // API: Posting a new contact info
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
 
   if(!req.body.name || !req.body.number){
     return res.status(400).json({error: 'content missing'})
@@ -94,11 +106,31 @@ app.post('/api/persons', (req, res) => {
 	contact.save().then(p => {
     res.json(p.toJSON())
   })
+  .catch(error => {
+    next(error)
+  })
   
 })
 
+// Handling not found endpoints
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'Endpoint not found' })
+}
+
 // Using not defined endpoint
 app.use(unknownEndpoint)
+
+// Error handler
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 // Listener
 const PORT = process.env.PORT || 3001
