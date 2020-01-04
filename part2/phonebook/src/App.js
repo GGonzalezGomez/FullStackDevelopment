@@ -89,10 +89,10 @@ const App = (props) => {
   }
 
   const handleDelete = (event) => {
-	  var contactToDelete = persons.filter((p) => p.id===parseInt(event.target.id))
+	  var contactToDelete = persons.filter((p) => p.id===event.target.id)
 	  if(contactToDelete.length>0){
 	  	if(window.confirm('Delete ' + contactToDelete[0].name + '?')) {
-		  var copy = persons.filter( (p) => p.id!==parseInt(event.target.id))
+		  var copy = persons.filter( (p) => p.id!==event.target.id)
 		  Comm.delContact(contactToDelete[0].id).then(response => {
 			  setNewName('')
 			  setNewNumber('')
@@ -116,7 +116,7 @@ const App = (props) => {
 	  	}
 	  }
   }
- 
+
   return (
     <div>
       <Notification message={notmsg.message} type={notmsg.type} />

@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 const url = process.env.MONGODB_URI
 
 console.log('Connecting to DB: ' + url)
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+// Check URL for deprecation warning settings: https://mongoosejs.com/docs/deprecations.html#-findandmodify-
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
     .then(result => {
         console.log('connected to MongoDB')
     })
