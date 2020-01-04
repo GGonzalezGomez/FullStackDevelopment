@@ -39,17 +39,17 @@ const App = (props) => {
 			    }
 		    	})
 		    	
-			Comm.update(contactInfo.id, {"name": contactInfo.name, "number": contactInfo.number}).then(response => {
-			    setPersons(newCopy)
-			    setNewName('')
-			    setNewNumber('')
+				Comm.update(contactInfo.id, {"name": contactInfo.name, "number": contactInfo.number}).then(response => {
+			    	setPersons(newCopy)
+			    	setNewName('')
+			    	setNewNumber('')
 		    	})
-			.then( () => {
-                        	setNotificationMessage({"message": `Contact '${newName}' has been updated`, "type": "notification"})
-                        	setTimeout( () => {
-                                	setNotificationMessage({"message": null, "type": "errornotification"})
-                        	},3000)
-                    	})
+				.then( () => {
+                	setNotificationMessage({"message": `Contact '${newName}' has been updated`, "type": "notification"})
+                	setTimeout( () => {
+                    	setNotificationMessage({"message": null, "type": "errornotification"})
+                	},3000)
+            	})
 		    }
 		    else {
 			    setNewName('')
@@ -60,18 +60,25 @@ const App = (props) => {
 		    var copy = [...persons]
 		    //var currMaxId = Math.max.apply(Math, copy.map((p) => p.id))
 		    //copy.push({name: newName, number: newNumber, id: currMaxId+1})
-        	    Comm.create({name: newName, number: newNumber}).then(response => {
-			copy.push({name: newName, number: newNumber, id: response.id})
-            		setPersons(copy)
-            		setNewName('')
-            		setNewNumber('')
-            	    })
+        	Comm.create({name: newName, number: newNumber}).then(response => {
+				copy.push({name: newName, number: newNumber, id: response.id})
+            	setPersons(copy)
+            	setNewName('')
+            	setNewNumber('')
+            })
 		    .then( () => {
-                    	setNotificationMessage({"message": `Contact '${newName}' has been created`, "type": "notification"})
-                        setTimeout( () => {
-                        	setNotificationMessage({"message": null, "type": "errornotification"})
-                        },3000)
-                    })
+                setNotificationMessage({"message": `Contact '${newName}' has been created`, "type": "notification"})
+                setTimeout( () => {
+                        setNotificationMessage({"message": null, "type": "errornotification"})
+                },3000)
+			})
+			.catch(error => {
+				console.log(error.response.data)
+				setNotificationMessage({"message": `Phone validation failed: '${error.response.data.error}'`, "type": "errornotification"})
+                setTimeout( () => {
+                        setNotificationMessage({"message": null, "type": "errornotification"})
+                },3000)
+			})
 		  }
 	  }
   }
