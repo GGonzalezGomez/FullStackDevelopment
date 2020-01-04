@@ -28,8 +28,7 @@ app.get('/', (req, res) => {
 app.get('/api/persons', (req, res, next) => {
   Person.find({}).then(people => {
     res.json(people.map(p => p.toJSON() ))
-  })
-  .catch(error => {
+  }).catch(error => {
     next(error)
   })
 })
@@ -43,7 +42,7 @@ app.get('/api/persons/:id', (request, response, next) => {
         response.json(person.toJSON())
       }
       else {
-        response.status(404).end() 
+        response.status(404).end()
       }
     })
     .catch(error => {
@@ -54,10 +53,10 @@ app.get('/api/persons/:id', (request, response, next) => {
 // API: Updating specific contact
 app.put('/api/persons/:id', (request, response, next) => {
   if(!request.body.number){
-          return response.status(400).json({error: 'content missing'})
+    return response.status(400).json({error: 'content missing'})
   }
 
-  Person.findByIdAndUpdate(request.params.id,{"name": request.body.name, "number": request.body.number})
+  Person.findByIdAndUpdate(request.params.id,{'name': request.body.name, 'number': request.body.number})
     .then(result => {
       if(result)
         response.json(result.toJSON())
@@ -83,10 +82,9 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 // Phonebook info
 app.get('/info', (request, response, next) => {
-  Person.find({}).then(people => {    
+  Person.find({}).then(people => {
     response.send('<div><p>Phonebook has info for ' + people.length + ' people</p><p>' + Date() + '</p></div>')
-  })
-  .catch(error => {
+  }).catch(error => {
     next(error)
   })
 })
@@ -99,17 +97,15 @@ app.post('/api/persons', (req, res, next) => {
   }
 
   const contact = new Person({
-		name: req.body.name,
-		number: req.body.number
-	})
-
-	contact.save().then(p => {
-    res.json(p.toJSON())
+    name: req.body.name,
+    number: req.body.number
   })
-  .catch(error => {
+
+  contact.save().then(p => {
+    res.json(p.toJSON())
+  }).catch(error => {
     next(error)
   })
-  
 })
 
 // Handling not found endpoints
@@ -127,7 +123,7 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: 'malformatted id' })
   }
   if(error.name === 'ValidationError'){
-    return response.status(400).json({"error": error.message})
+    return response.status(400).json({'error': error.message})
   }
 
   next(error)
