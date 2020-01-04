@@ -69,14 +69,14 @@ const App = (props) => {
 		    .then( () => {
                 setNotificationMessage({"message": `Contact '${newName}' has been created`, "type": "notification"})
                 setTimeout( () => {
-                        setNotificationMessage({"message": null, "type": "errornotification"})
+                    setNotificationMessage({"message": null, "type": "errornotification"})
                 },3000)
 			})
 			.catch(error => {
 				console.log(error.response.data)
 				setNotificationMessage({"message": `Phone validation failed: '${error.response.data.error}'`, "type": "errornotification"})
                 setTimeout( () => {
-                        setNotificationMessage({"message": null, "type": "errornotification"})
+                    setNotificationMessage({"message": null, "type": "errornotification"})
                 },3000)
 			})
 		  }
@@ -99,27 +99,27 @@ const App = (props) => {
 	  var contactToDelete = persons.filter((p) => p.id===event.target.id)
 	  if(contactToDelete.length>0){
 	  	if(window.confirm('Delete ' + contactToDelete[0].name + '?')) {
-		  var copy = persons.filter( (p) => p.id!==event.target.id)
-		  Comm.delContact(contactToDelete[0].id).then(response => {
-			  setNewName('')
-			  setNewNumber('')
-			  //setPersons(copy)
-		  	  })
-			  .then( () => {
-                                  setNotificationMessage({"message": `Contact '${contactToDelete[0].name}' has been deleted`, "type": "notification"})
-                                  setTimeout( () => {
-                                          setNotificationMessage({"message": null, "type": "errornotification"})
-                                  },3000)
-                          })
-			  .catch(error => {
-				  setNotificationMessage({"message": `Information of '${contactToDelete[0].name}' has already been removed from server`, "type": "errornotification"})
-				  setTimeout( () => {
-					  setNotificationMessage({"message": null, "type": "errornotification"})
-				  },3000)
-			  })
-			  .finally( () => {
-				  setPersons(copy)
-			  })
+		  	var copy = persons.filter( (p) => p.id!==event.target.id)
+		  	Comm.delContact(contactToDelete[0].id).then(response => {
+				setNewName('')
+			  	setNewNumber('')
+			  	//setPersons(copy)
+		  	})
+			.then( () => {
+                setNotificationMessage({"message": `Contact '${contactToDelete[0].name}' has been deleted`, "type": "notification"})
+                setTimeout( () => {
+                    setNotificationMessage({"message": null, "type": "errornotification"})
+                },3000)
+            })
+			.catch(error => {
+				setNotificationMessage({"message": `Information of '${contactToDelete[0].name}' has already been removed from server`, "type": "errornotification"})
+				setTimeout( () => {
+					setNotificationMessage({"message": null, "type": "errornotification"})
+				},3000)
+			})
+			.finally( () => {
+				setPersons(copy)
+			})
 	  	}
 	  }
   }
