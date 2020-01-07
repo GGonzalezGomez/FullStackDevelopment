@@ -1,41 +1,32 @@
-const requestLogger = (request, response, next) => {
-    console.log('Method:', request.method)
-    console.log('Path:  ', request.path)
-    console.log('Body:  ', request.body)
-    console.log('---')
-    next()
-  }
-
 const morgan = require('morgan')
 
 // Logging post and put received input data
 morgan.token('postRequest', function(req, res) {
-    if(req.method === 'POST' || req.method === 'PUT')
-      return JSON.stringify(req.body)
-    else
-      return ' '
-  })
+  if(req.method === 'POST' || req.method === 'PUT')
+    return JSON.stringify(req.body)
+  else
+    return ' '
+})
 
   
-  const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+  
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  
+  if (error.name === 'CastError' && error.kind === 'ObjectId') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } else if (error.name === 'ValidationError') {
+    return response.status(400).json({ error: error.message })
   }
   
-  const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
+  next(error)
+}
   
-    if (error.name === 'CastError' && error.kind === 'ObjectId') {
-      return response.status(400).send({ error: 'malformatted id' })
-    } else if (error.name === 'ValidationError') {
-      return response.status(400).json({ error: error.message })
-    }
-  
-    next(error)
-  }
-  
-  module.exports = {
-    requestLogger,
-    unknownEndpoint,
-    errorHandler,
-    morgan
-  }
+module.exports = {
+  unknownEndpoint,
+  errorHandler,
+  morgan
+}
