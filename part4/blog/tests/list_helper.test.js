@@ -1,5 +1,6 @@
 const listHelper = require('../utils/list_helper')
 
+// Test values
 const listWithOneBlog = [
   {
     _id: '5a422aa71b54a676234d17f8',
@@ -89,6 +90,9 @@ const listWithEvenBiggerBlog = [
   }  
 ]
 
+
+// Test functions
+
 test('dummy returns one', () => {
   const blogs = []
 
@@ -139,4 +143,9 @@ describe('favorite blog', () => {
     })
   })
 
+})
+
+describe('most blogs', () => {
+  const result = listHelper.mostBlogs(listWithEvenBiggerBlog)
+  expect(result).toBe(1)
 })
