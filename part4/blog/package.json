@@ -1,0 +1,38 @@
+{
+  "name": "Blog",
+  "version": "1.0.0",
+  "description": "FullStack open course - part 4 - Blog",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "watch": "nodemon ./index.js",
+    "lint": "eslint ./*.js",
+    "test": "echo \"Error: No test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GGonzalezGomez/FullStackDevelopment.git"
+  },
+  "keywords": [
+    "FullStack",
+    "Blog"
+  ],
+  "author": "Guillermo Gonzalez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GGonzalezGomez/FullStackDevelopment/issues"
+  },
+  "homepage": "https://github.com/GGonzalezGomez/FullStackDevelopment#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.4",
+    "mongoose-unique-validator": "^2.0.3",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "nodemon": "^2.0.2"
+  }
+}
