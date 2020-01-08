@@ -40,6 +40,19 @@ test('new posts are correct', async () => {
   expect(after.body.length).toBe(prev.body.length+1)
 })
 
+test('empty likes amount', async () => {
+  // Insert a new one
+  const newBlog = {
+    'title': 'This is an auto posted entry',
+    'author': 'Autotester',
+    'url': 'http://example.com/autotester'
+  }
+  const response = await api.post('/api/blogs').send(newBlog).expect(201).expect('Content-Type', /application\/json/)
+  // Delete the new post
+  await api.delete('/api/blogs/'+response.body.id)
+  expect(response.body.likes).toBe(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
