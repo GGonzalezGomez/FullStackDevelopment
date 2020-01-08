@@ -53,6 +53,17 @@ test('empty likes amount', async () => {
   expect(response.body.likes).toBe(0)
 })
 
+test('empty url and title', async () => {
+  // Insert a new one
+  const newBlog = {
+    'author': 'Autotester',
+    'likes': 24
+  }
+  const response = await api.post('/api/blogs').send(newBlog).expect(400)
+  // Delete the new post
+  //await api.delete('/api/blogs/'+response.body.id)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

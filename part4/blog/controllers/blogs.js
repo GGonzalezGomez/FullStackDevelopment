@@ -8,8 +8,13 @@ blogsRouter.get('/', async (request, response) => {
   
 blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
-  const result = await blog.save()    
-  response.status(201).json(result)
+  if(blog.title && blog.url){
+    const result = await blog.save()    
+    response.status(201).json(result)
+  }
+  else {
+    response.status(400).json({error: 'content missing'})
+  }
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
