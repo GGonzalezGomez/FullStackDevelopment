@@ -176,3 +176,18 @@ describe('most blogs', () => {
     expect(result).toEqual({})
   })
 })
+
+describe('most likes', () => {
+  test('when list is even bigger', () => {
+    const result = listHelper.mostLikes(listWithEvenBiggerBlog)
+    expect(result).toEqual({
+      'author': 'Edsger W. Dijkstra',
+      'likes': 12
+    })
+  })
+
+  test('when list is empty', () => {
+    const result = listHelper.mostLikes([])
+    expect(result).toEqual({})
+  })
+})
