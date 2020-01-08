@@ -28,21 +28,19 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs => {
-  /*
-  const authorBlogs = lodash.groupBy(blogs, function(b) { return b.author})
-  console.log( lodash.map(authorBlogs, function(b) {
-    console.log(b)
-    console.log(Object.keys(b))
-    return 2}) )
-  */
-  //console.log(Object.keys(authorBlogs))
   const authorBlogs = lodash.countBy(blogs, function(b) { return b.author})
-  //lodash.each(authorBlogs, b
-  lodash.reduce(authorBlogs, function (result, value, key) {
-    //if(value>result.)
-    return 1
-  },{'N/A': -1})
-  return 1
+  const listSize = lodash.size(authorBlogs)
+  const maxValue = lodash.last(lodash.sortBy(authorBlogs,1))
+  var mB = {}
+  lodash.forEach(authorBlogs, function(value, key){ 
+    if(value == maxValue){
+      mB = {'author': key, 'blogs': value}
+      return false
+    }
+  })
+
+  return mB
+
 })
   
 module.exports = {
