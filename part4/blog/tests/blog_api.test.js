@@ -60,8 +60,24 @@ test('empty url and title', async () => {
     'likes': 24
   }
   const response = await api.post('/api/blogs').send(newBlog).expect(400)
-  // Delete the new post
-  //await api.delete('/api/blogs/'+response.body.id)
+})
+
+test('empty url and title', async () => {
+  // Insert a new one
+  const newBlog = {
+    'title': 'This is an auto posted entry',
+    'author': 'Autotester',
+    'url': 'http://example.com/autotester',
+    'likes': 1
+  }
+  
+  const newPostResponse = await api.post('/api/blogs').send(newBlog).expect(201).expect('Content-Type', /application\/json/)
+  newBlog.likes = 2
+  await api.put('/api/blogs/'+newPostResponse.body.id).send(newBlog).expect(200).expect('Content-Type', /application\/json/)
+  const updatedPost = await api.get('/api/blogs/'+newPostResponse.body.id).expect(200).expect('Content-Type', /application\/json/)
+  await api.delete('/api/blogs/'+newPostResponse.body.id)
+  expect(updatedPost.body.likes).toBe(2)
+
 })
 
 afterAll(() => {
