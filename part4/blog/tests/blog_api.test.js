@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 const api = supertest(app)
 
@@ -62,7 +64,7 @@ test('empty url and title', async () => {
   const response = await api.post('/api/blogs').send(newBlog).expect(400)
 })
 
-test('empty url and title', async () => {
+test('Update a post', async () => {
   // Insert a new one
   const newBlog = {
     'title': 'This is an auto posted entry',
