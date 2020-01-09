@@ -13,7 +13,7 @@ test('notes are returned as json', async () => {
 
 test('blogs count is correct', async () => {
   const response = await api.get('/api/blogs')
-  expect(response.body.length).toBe(4)
+  expect(response.body.length).toBe(1)
 })
 
 test('id field exists', async () => {
