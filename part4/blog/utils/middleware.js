@@ -3,7 +3,7 @@ const morgan = require('morgan')
 // Logging post and put received input data
 morgan.token('postRequest', function(req, res) {
   if(req.method === 'POST' || req.method === 'PUT'){
-    if(req.baseUrl !== '/api/users')
+    if(req.baseUrl !== '/api/users' && req.baseUrl !== '/api/login')
       return JSON.stringify(req.body)
     else {
       return JSON.stringify({'name': req.body.name, 'username': req.body.username})
