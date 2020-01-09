@@ -10,27 +10,47 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
 
-
+  // Retrieve list of all blogs
   const effectHook = () => {
     console.log("Running Effect Hook")
     blogsService.getAll().then(blogs => {
       console.log('Response received')
       setBlogs(blogs)
-      console.log(blogs)
     })
   }
 
   useEffect(effectHook,[])
+
+  // Check if the user is still logged in through local storage
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('user')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+    }
+  }, [])
+
 
   const handleLogin = async (event) => {
     event.preventDefault()
     try{
       console.log('logging in with', username, password)
       const user = await loginService.login({username, password})
-      console.log(user)
       setUser(user)
       setUsername('')
       setPassword('')
+      window.localStorage.setItem('user', JSON.stringify(user))
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+  const handleLogout = async (event) => {
+    event.preventDefault()
+    try{
+      console.log('logging ' + user.name + ' out...')
+      setUser(null)
+      window.localStorage.removeItem('user')
     } catch(e){
       console.log(e)
     }
@@ -62,7 +82,7 @@ const App = () => {
     return(
       <div>
         <h2>Blogs</h2>
-        <p>{user.name} logged in</p>
+        <p>{user.name} logged in <button id='logout' onClick={handleLogout}>Logout</button></p>
         <div>
           {blogs.map(blog =><Blog key={blog.id} blog={blog} />)}
         </div>
