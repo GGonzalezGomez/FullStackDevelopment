@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react'
 import logo from './logo.png'
 import Blog from './components/Blog'
 import NewEntry from './components/NewEntry'
+import Notification from './components/Notification'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 
 const App = () => {
+  const [notmsg, setNotificationMessage] = useState({"message": null, "type": "errornotification"})
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [newTitle, setNewTitle] = useState('')
@@ -46,12 +48,20 @@ const App = () => {
     try{
       console.log('logging in with', username, password)
       const user = await loginService.login({username, password})
+      setNotificationMessage({"message": `Welcome '${user.name}'`, "type": "notification"})
+      setTimeout( () => {
+        setNotificationMessage({"message": null, "type": "errornotification"})
+      },3000)
       setUser(user)
       setUsername('')
       setPassword('')
       window.localStorage.setItem('user', JSON.stringify(user))
     } catch(e){
       console.log(e)
+      setNotificationMessage({"message": "Wrong username or password", "type": "errornotification"})
+      setTimeout( () => {
+        setNotificationMessage({"message": null, "type": "errornotification"})
+      },3000)
     }
   }
 
@@ -63,18 +73,34 @@ const App = () => {
       window.localStorage.removeItem('user')
     } catch(e){
       console.log(e)
+      setNotificationMessage({"message": e.message, "type": "errornotification"})
+      setTimeout( () => {
+        setNotificationMessage({"message": null, "type": "errornotification"})
+      },3000)
     }
   }
 
   const HandleCreateNewEntry = async (event) => {
     event.preventDefault()
-    const response = await blogsService.createNewBlog({user,newTitle,newAuthor,newUrl})
-    var tmpBlogs = [...blogs]
-    tmpBlogs.push(response)
-    setBlogs(tmpBlogs)
-    setNewTitle('')
-    setNewUrl('')
-    setNewAuthor('')
+    try{
+      const response = await blogsService.createNewBlog({user,newTitle,newAuthor,newUrl})
+      var tmpBlogs = [...blogs]
+      tmpBlogs.push(response)
+      setBlogs(tmpBlogs)
+      setNotificationMessage({"message": `a new blog: '${newTitle}' by '${newAuthor}'`, "type": "notification"})
+      setTimeout( () => {
+        setNotificationMessage({"message": null, "type": "errornotification"})
+      },3000)
+      setNewTitle('')
+      setNewUrl('')
+      setNewAuthor('')
+    } catch(e){
+      console.log(e)
+      setNotificationMessage({"message": e.message, "type": "errornotification"})
+      setTimeout( () => {
+        setNotificationMessage({"message": null, "type": "errornotification"})
+      },3000)
+    }
   }
 
 
@@ -97,6 +123,7 @@ const App = () => {
     return (
       <div className="App">
         <header className="App-header">
+         <Notification message={notmsg.message} type={notmsg.type} />
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Login to application</h2>
         </header>      
@@ -118,6 +145,7 @@ const App = () => {
   else {
     return(
       <div>
+        <Notification message={notmsg.message} type={notmsg.type} />
         <h2>Blogs</h2>
         <div>
           <p>{user.name} logged in <button id='logout' onClick={handleLogout}>Logout</button></p>
