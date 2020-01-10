@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import logo from './logo.png'
 import Blog from './components/Blog'
+import NewEntry from './components/NewEntry'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [newTitle, setNewTitle] = useState('')
+  const [newAuthor, setNewAuthor] = useState('')
+  const [newUrl, setNewUrl] = useState('')
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
+
+  // Effect Hooks
+  // -----------------------------------------------------------------------------
 
   // Retrieve list of all blogs
   const effectHook = () => {
@@ -17,6 +24,7 @@ const App = () => {
       console.log('Response received')
       setBlogs(blogs)
     })
+    
   }
 
   useEffect(effectHook,[])
@@ -30,6 +38,8 @@ const App = () => {
     }
   }, [])
 
+  // Handling functions
+  // -----------------------------------------------------------------------------
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -55,6 +65,33 @@ const App = () => {
       console.log(e)
     }
   }
+
+  const HandleCreateNewEntry = async (event) => {
+    event.preventDefault()
+    const response = await blogsService.createNewBlog({user,newTitle,newAuthor,newUrl})
+    var tmpBlogs = [...blogs]
+    tmpBlogs.push(response)
+    setBlogs(tmpBlogs)
+    setNewTitle('')
+    setNewUrl('')
+    setNewAuthor('')
+  }
+
+
+  const handleNewTitle = (event) => {
+	  setNewTitle(event.target.value)
+  }
+
+  const handleNewAuthor = (event) => {
+	  setNewAuthor(event.target.value)
+  }
+
+  const handleNewUrl = (event) => {
+	  setNewUrl(event.target.value)
+  }
+
+  // Main routine
+  // -----------------------------------------------------------------------------
 
   if(user === null) {
     return (
@@ -82,8 +119,12 @@ const App = () => {
     return(
       <div>
         <h2>Blogs</h2>
-        <p>{user.name} logged in <button id='logout' onClick={handleLogout}>Logout</button></p>
         <div>
+          <p>{user.name} logged in <button id='logout' onClick={handleLogout}>Logout</button></p>
+        </div>
+        <div>
+          <h2>Create new</h2>
+          <NewEntry changeNewTitle={handleNewTitle} newTitle={newTitle} changeNewAuthor={handleNewAuthor} newAuthor={newAuthor} changeNewUrl={handleNewUrl} newUrl={newUrl} handleCreateNewEntry={HandleCreateNewEntry} />
           {blogs.map(blog =><Blog key={blog.id} blog={blog} />)}
         </div>
       </div>

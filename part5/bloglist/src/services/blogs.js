@@ -6,4 +6,13 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-export default { getAll }
+const createNewBlog = async (props) => {
+  const config = {
+    headers: { "Authorization" : `Bearer ${props.user.token}` }
+  }
+  const newEntry = {'title': props.newTitle, 'author': props.newAuthor, 'url': props.newUrl}
+  const response = await axios.post(baseUrl, newEntry, config)
+  return response.data
+}
+
+export default { getAll, createNewBlog }
