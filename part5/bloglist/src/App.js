@@ -26,9 +26,9 @@ const App = () => {
     console.log("Running Effect Hook")
     blogsService.getAll().then(blogs => {
       console.log('Response received')
+      blogs.forEach(blog => {blog.expanded = false})
       setBlogs(blogs)
     })
-    
   }
 
   useEffect(effectHook,[])
@@ -119,6 +119,15 @@ const App = () => {
 	  setNewUrl(event.target.value)
   }
 
+  const handleExtendedBlog = (event) => {
+    var tmpBlogs = [...blogs]
+    tmpBlogs.forEach(blog => {
+      if(blog.id === event.target.id)
+        blog.expanded = !blog.expanded
+    })
+    setBlogs(tmpBlogs)
+  }
+
   // Main routine
   // -----------------------------------------------------------------------------
 
@@ -156,7 +165,7 @@ const App = () => {
           <NewEntry changeNewTitle={handleNewTitle} newTitle={newTitle} changeNewAuthor={handleNewAuthor} newAuthor={newAuthor} changeNewUrl={handleNewUrl} newUrl={newUrl} handleCreateNewEntry={handleCreateNewEntry} />
         </Togglable>
         <div>
-          {blogs.map(blog =><Blog key={blog.id} blog={blog} />)}
+          {blogs.map(blog =><Blog key={blog.id} blog={blog} handleClick={handleExtendedBlog} />)}
         </div>
       </div>
     )
