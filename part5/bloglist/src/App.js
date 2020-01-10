@@ -3,11 +3,13 @@ import logo from './logo.png'
 import Blog from './components/Blog'
 import NewEntry from './components/NewEntry'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 
 const App = () => {
   const [notmsg, setNotificationMessage] = useState({"message": null, "type": "errornotification"})
+  const newEntryFormRef = React.createRef()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [newTitle, setNewTitle] = useState('')
@@ -87,6 +89,7 @@ const App = () => {
       var tmpBlogs = [...blogs]
       tmpBlogs.push(response)
       setBlogs(tmpBlogs)
+      newEntryFormRef.current.toggleVisibility()
       setNotificationMessage({"message": `a new blog: '${newTitle}' by '${newAuthor}'`, "type": "notification"})
       setTimeout( () => {
         setNotificationMessage({"message": null, "type": "errornotification"})
@@ -116,18 +119,22 @@ const App = () => {
 	  setNewUrl(event.target.value)
   }
 
-  // Main routine
-  // -----------------------------------------------------------------------------
+  const handleTest = async (event) => {
+    event.preventDefault()
+    console.log('Check ref')
+    newEntryFormRef.current.toggleVisibility()
+    console.log('exiting ref')
+  }
 
-  if(user === null) {
-    return (
+
+  const Login = () => {
+    return(
       <div className="App">
         <header className="App-header">
          <Notification message={notmsg.message} type={notmsg.type} />
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Login to application</h2>
         </header>      
-
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -142,6 +149,17 @@ const App = () => {
       </div>
     )
   }
+
+  // Main routine
+  // -----------------------------------------------------------------------------
+
+  if(user === null) {
+    return (
+      <div>
+        <Login />
+      </div>
+    )
+  }
   else {
     return(
       <div>
@@ -150,10 +168,15 @@ const App = () => {
         <div>
           <p>{user.name} logged in <button id='logout' onClick={handleLogout}>Logout</button></p>
         </div>
-        <div>
-          <h2>Create new</h2>
+        <Togglable buttonLabel='create new' ref={newEntryFormRef}>
           <NewEntry changeNewTitle={handleNewTitle} newTitle={newTitle} changeNewAuthor={handleNewAuthor} newAuthor={newAuthor} changeNewUrl={handleNewUrl} newUrl={newUrl} handleCreateNewEntry={HandleCreateNewEntry} />
+        </Togglable>
           {blogs.map(blog =><Blog key={blog.id} blog={blog} />)}
+        <div>
+          <Togglable buttonLabel='kk' ref={newEntryFormRef}>
+            <p>This is a F**ng test</p>
+            <p><button onClick={handleTest}>Shit</button></p>
+          </Togglable>
         </div>
       </div>
     )
