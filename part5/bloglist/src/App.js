@@ -82,18 +82,18 @@ const App = () => {
     }
   }
 
-  const HandleCreateNewEntry = async (event) => {
+  const handleCreateNewEntry = async (event) => {
     event.preventDefault()
     try{
-      const response = await blogsService.createNewBlog({user,newTitle,newAuthor,newUrl})
+      newEntryFormRef.current.toggleVisibility()
+      const response = await blogsService.createNewBlog({user,newTitle: newTitle,newAuthor: newAuthor,newUrl: newUrl})
       var tmpBlogs = [...blogs]
       tmpBlogs.push(response)
-      setBlogs(tmpBlogs)
-      newEntryFormRef.current.toggleVisibility()
       setNotificationMessage({"message": `a new blog: '${newTitle}' by '${newAuthor}'`, "type": "notification"})
       setTimeout( () => {
         setNotificationMessage({"message": null, "type": "errornotification"})
       },3000)
+      setBlogs(tmpBlogs)
       setNewTitle('')
       setNewUrl('')
       setNewAuthor('')
@@ -119,16 +119,11 @@ const App = () => {
 	  setNewUrl(event.target.value)
   }
 
-  const handleTest = async (event) => {
-    event.preventDefault()
-    console.log('Check ref')
-    newEntryFormRef.current.toggleVisibility()
-    console.log('exiting ref')
-  }
+  // Main routine
+  // -----------------------------------------------------------------------------
 
-
-  const Login = () => {
-    return(
+  if(user === null) {
+    return (
       <div className="App">
         <header className="App-header">
          <Notification message={notmsg.message} type={notmsg.type} />
@@ -149,17 +144,6 @@ const App = () => {
       </div>
     )
   }
-
-  // Main routine
-  // -----------------------------------------------------------------------------
-
-  if(user === null) {
-    return (
-      <div>
-        <Login />
-      </div>
-    )
-  }
   else {
     return(
       <div>
@@ -169,14 +153,10 @@ const App = () => {
           <p>{user.name} logged in <button id='logout' onClick={handleLogout}>Logout</button></p>
         </div>
         <Togglable buttonLabel='create new' ref={newEntryFormRef}>
-          <NewEntry changeNewTitle={handleNewTitle} newTitle={newTitle} changeNewAuthor={handleNewAuthor} newAuthor={newAuthor} changeNewUrl={handleNewUrl} newUrl={newUrl} handleCreateNewEntry={HandleCreateNewEntry} />
+          <NewEntry changeNewTitle={handleNewTitle} newTitle={newTitle} changeNewAuthor={handleNewAuthor} newAuthor={newAuthor} changeNewUrl={handleNewUrl} newUrl={newUrl} handleCreateNewEntry={handleCreateNewEntry} />
         </Togglable>
-          {blogs.map(blog =><Blog key={blog.id} blog={blog} />)}
         <div>
-          <Togglable buttonLabel='kk' ref={newEntryFormRef}>
-            <p>This is a F**ng test</p>
-            <p><button onClick={handleTest}>Shit</button></p>
-          </Togglable>
+          {blogs.map(blog =><Blog key={blog.id} blog={blog} />)}
         </div>
       </div>
     )
