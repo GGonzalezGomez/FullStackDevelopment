@@ -167,6 +167,32 @@ const App = () => {
     }
   }
 
+  const handleBlogDelete = async (event) => {
+    event.preventDefault()
+    try{
+      const blogToDelete = blogs.filter(blog => blog.id === event.target.id)
+      console.log(event.target.id)
+      if(!window.confirm(`remove '${blogToDelete[0].title}' by '${blogToDelete[0].author}'`)){
+        return null
+      }
+      var tmpBlogs = []
+      blogs.forEach(blog => {
+        if(blog.id !== event.target.id){
+          tmpBlogs.push(blog)
+        }
+      })
+      await blogsService.removeBlog({'id': event.target.id, 'user': user})
+      setBlogs(tmpBlogs)
+    } catch(e){
+      console.log(e)
+      setNotificationMessage({"message": e.message, "type": "errornotification"})
+      setTimeout( () => {
+        setNotificationMessage({"message": null, "type": "errornotification"})
+      },3000)
+    }
+  }
+
+
   // Main routine
   // -----------------------------------------------------------------------------
 
@@ -204,7 +230,7 @@ const App = () => {
           <NewEntry changeNewTitle={handleNewTitle} newTitle={newTitle} changeNewAuthor={handleNewAuthor} newAuthor={newAuthor} changeNewUrl={handleNewUrl} newUrl={newUrl} handleCreateNewEntry={handleCreateNewEntry} />
         </Togglable>
         <div>
-          {blogs.map(blog =><Blog key={blog.id} blog={blog} handleClick={handleExtendedBlog} handleLikeClick={handleBlogLike} />)}
+          {blogs.map(blog =><Blog key={blog.id} blog={blog} handleClick={handleExtendedBlog} handleLikeClick={handleBlogLike} handleRemoveClick={handleBlogDelete} />)}
         </div>
       </div>
     )
