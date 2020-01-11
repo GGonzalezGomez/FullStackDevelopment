@@ -128,6 +128,30 @@ const App = () => {
     setBlogs(tmpBlogs)
   }
 
+  const handleBlogLike = async (event) => {
+    event.preventDefault()
+    try{
+      var updatedBlog = {}
+      var tmpBlogs = JSON.parse(JSON.stringify( blogs )) // Avoiding shallow copy to update the element
+      tmpBlogs.forEach(blog => {
+        if(blog.id === event.target.id){
+          blog.likes = blog.likes+1
+          updatedBlog = {...blog}
+        }
+      })
+      await blogsService.updateBlog({user, 'title': updatedBlog.title, 
+        'author': updatedBlog.author, 'url': updatedBlog.url, 'likes': updatedBlog.likes,
+        'userid': updatedBlog.user.id, 'id': updatedBlog.id})
+      setBlogs(tmpBlogs)
+    } catch(e){
+      console.log(e)
+      setNotificationMessage({"message": e.message, "type": "errornotification"})
+      setTimeout( () => {
+        setNotificationMessage({"message": null, "type": "errornotification"})
+      },3000)
+    }
+  }
+
   // Main routine
   // -----------------------------------------------------------------------------
 
@@ -165,7 +189,7 @@ const App = () => {
           <NewEntry changeNewTitle={handleNewTitle} newTitle={newTitle} changeNewAuthor={handleNewAuthor} newAuthor={newAuthor} changeNewUrl={handleNewUrl} newUrl={newUrl} handleCreateNewEntry={handleCreateNewEntry} />
         </Togglable>
         <div>
-          {blogs.map(blog =><Blog key={blog.id} blog={blog} handleClick={handleExtendedBlog} />)}
+          {blogs.map(blog =><Blog key={blog.id} blog={blog} handleClick={handleExtendedBlog} handleLikeClick={handleBlogLike} />)}
         </div>
       </div>
     )

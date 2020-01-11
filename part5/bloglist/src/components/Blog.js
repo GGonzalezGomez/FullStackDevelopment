@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Blog = ({ blog,handleClick }) => {
+const Blog = ({ blog,handleClick,handleLikeClick }) => {
   //const hideWhenVisible = { display: blog.expanded ? 'none' : '' }
   const showWhenVisible = { display: blog.expanded ? '' : 'none' }
   return (
@@ -8,7 +8,7 @@ const Blog = ({ blog,handleClick }) => {
       <p id={blog.id} style={{'marginTop': '0px','marginBottom': '0px'}}>{blog.title} {blog.author}</p>
       <div style={showWhenVisible}>
         <p id={blog.id} style={{'marginTop': '0px','marginBottom': '0px'}}><a href={blog.url}>{blog.url}</a></p>
-        <p id={blog.id} style={{'marginTop': '0px','marginBottom': '0px'}}>{blog.likes} likes</p>
+        <p id={blog.id} style={{'marginTop': '0px','marginBottom': '0px'}}>{blog.likes} likes <button id={blog.id} onClick={handleLikeClick}>Like</button></p>
         <p id={blog.id} style={{'marginTop': '0px','marginBottom': '0px'}}>added by {blog.user.name}</p>
       </div>
     </div>
