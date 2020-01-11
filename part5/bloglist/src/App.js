@@ -27,6 +27,14 @@ const App = () => {
     blogsService.getAll().then(blogs => {
       console.log('Response received')
       blogs.forEach(blog => {blog.expanded = false})
+      // sort from most likes to less
+      blogs.sort((a,b) => {
+        if(a.likes < b.likes)
+          return 1
+        if(a.likes > b.likes)
+          return -1
+        return 0
+      })
       setBlogs(blogs)
     })
   }
@@ -142,6 +150,13 @@ const App = () => {
       await blogsService.updateBlog({user, 'title': updatedBlog.title, 
         'author': updatedBlog.author, 'url': updatedBlog.url, 'likes': updatedBlog.likes,
         'userid': updatedBlog.user.id, 'id': updatedBlog.id})
+      tmpBlogs.sort((a,b) => {
+        if(a.likes < b.likes)
+          return 1
+        if(a.likes > b.likes)
+          return -1
+        return 0
+      })
       setBlogs(tmpBlogs)
     } catch(e){
       console.log(e)
