@@ -171,7 +171,9 @@ const App = () => {
     event.preventDefault()
     try{
       const blogToDelete = blogs.filter(blog => blog.id === event.target.id)
-      console.log(event.target.id)
+      if(user.username !== blogToDelete[0].user.username){
+        return null
+      }
       if(!window.confirm(`remove '${blogToDelete[0].title}' by '${blogToDelete[0].author}'`)){
         return null
       }
