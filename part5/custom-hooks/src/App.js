@@ -12,10 +12,14 @@ const useField = (type) => {
     setValue('')
   }
 
+  const service = {
+    reset
+  }
+
   return {
     type,
     value,
-    reset,
+    service,
     onChange
   }
 }
@@ -29,17 +33,23 @@ const App = () => {
   const [notes, noteService] = useResource('http://localhost:3005/notes')
   const [persons, personService] = useResource('http://localhost:3005/persons')
 
-  const handleNoteSubmit = (event) => {
+  const handleNoteSubmit = async (event) => {
     event.preventDefault()
-    noteService.create({ content: content.value })
-    content.reset()
+    const response = await noteService.create({ content: content.value })
+    var tmp = [...notes]
+    tmp.push(response)
+    noteService.updateResources(tmp)
+    content.service.reset()
   }
  
-  const handlePersonSubmit = (event) => {
+  const handlePersonSubmit = async (event) => {
     event.preventDefault()
-    personService.create({ name: name.value, number: number.value})
-    name.reset()
-    number.reset()
+    const response = await personService.create({ name: name.value, number: number.value})
+    var tmp = [...persons]
+    tmp.push(response)
+    personService.updateResources(tmp)
+    name.service.reset()
+    number.service.reset()
   }
 
   const effectHook = () => {
