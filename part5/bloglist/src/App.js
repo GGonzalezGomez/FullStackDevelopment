@@ -6,17 +6,19 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import loginService from './services/login'
 import blogsService from './services/blogs'
+import {useField} from './hooks/index'
 
 const App = () => {
   const [notmsg, setNotificationMessage] = useState({"message": null, "type": "errornotification"})
   const newEntryFormRef = React.createRef()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [newTitle, setNewTitle] = useState('')
-  const [newAuthor, setNewAuthor] = useState('')
-  const [newUrl, setNewUrl] = useState('')
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
+  const newTitle = useField('text')
+  const newAuthor = useField('text')
+  const newUrl = useField('text')
+
 
   // Effect Hooks
   // -----------------------------------------------------------------------------
@@ -94,17 +96,17 @@ const App = () => {
     event.preventDefault()
     try{
       newEntryFormRef.current.toggleVisibility()
-      const response = await blogsService.createNewBlog({user,newTitle: newTitle,newAuthor: newAuthor,newUrl: newUrl})
+      const response = await blogsService.createNewBlog({user,newTitle: newTitle.value,newAuthor: newAuthor.value,newUrl: newUrl.value})
       var tmpBlogs = [...blogs]
       tmpBlogs.push(response)
-      setNotificationMessage({"message": `a new blog: '${newTitle}' by '${newAuthor}'`, "type": "notification"})
+      setNotificationMessage({"message": `a new blog: '${newTitle.value}' by '${newAuthor.value}'`, "type": "notification"})
       setTimeout( () => {
         setNotificationMessage({"message": null, "type": "errornotification"})
       },3000)
       setBlogs(tmpBlogs)
-      setNewTitle('')
-      setNewUrl('')
-      setNewAuthor('')
+      newTitle.reset()
+      newUrl.reset()
+      newAuthor.reset()
     } catch(e){
       console.log(e)
       setNotificationMessage({"message": e.message, "type": "errornotification"})
@@ -114,18 +116,6 @@ const App = () => {
     }
   }
 
-
-  const handleNewTitle = (event) => {
-	  setNewTitle(event.target.value)
-  }
-
-  const handleNewAuthor = (event) => {
-	  setNewAuthor(event.target.value)
-  }
-
-  const handleNewUrl = (event) => {
-	  setNewUrl(event.target.value)
-  }
 
   const handleExtendedBlog = (event) => {
     var tmpBlogs = [...blogs]
@@ -229,7 +219,7 @@ const App = () => {
           <p>{user.name} logged in <button id='logout' onClick={handleLogout}>Logout</button></p>
         </div>
         <Togglable buttonLabel='create new' ref={newEntryFormRef}>
-          <NewEntry changeNewTitle={handleNewTitle} newTitle={newTitle} changeNewAuthor={handleNewAuthor} newAuthor={newAuthor} changeNewUrl={handleNewUrl} newUrl={newUrl} handleCreateNewEntry={handleCreateNewEntry} />
+          <NewEntry newTitle={{...newTitle}} newAuthor={{...newAuthor}} newUrl={{...newUrl}} handleCreateNewEntry={handleCreateNewEntry} />
         </Togglable>
         <div>
           {blogs.map(blog =><Blog key={blog.id} blog={blog} handleClick={handleExtendedBlog} handleLikeClick={handleBlogLike} handleRemoveClick={handleBlogDelete} />)}
