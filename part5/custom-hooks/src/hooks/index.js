@@ -36,39 +36,6 @@ export const useResource = (baseUrl) => {
     const service = {
         create, setToken, getAll, update, updateResources
     }
-
-//    const service = {
-        /*
-        setToken: (newToken) => {
-            token = `bearer ${newToken}`
-        },
-
-        getAll : () => {
-            const request = axios.get(baseUrl)
-            return request.then(response => response.data)
-        },
-  
-        create : async newObject => {
-            const config = {
-                headers: { Authorization: token },
-            }
-  
-            const response = await axios.post(baseUrl, newObject, config)
-            return response.data
-        },
-  
-        update : (id, newObject) => {
-            const request = axios.put(`${ baseUrl } /${id}`, newObject)
-            return request.then(response => response.data)
-        },
-
-        updateResources: (newResources) => {
-            setResources(newResources)
-        }
-        */
-//       service: 'Hola'
-//    }
-    
   
     return [resources, service ]
   }

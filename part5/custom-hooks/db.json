@@ -11,6 +11,10 @@
     {
       "content": "This is a test note!",
       "id": 3
+    },
+    {
+      "content": "This is another test note",
+      "id": 4
     }
   ],
   "persons": [
@@ -18,6 +22,16 @@
       "name": "mluukkai",
       "number": "040-5483923",
       "id": 1
+    },
+    {
+      "name": "Guillermo",
+      "number": "2993-3949494",
+      "id": 2
+    },
+    {
+      "name": "Alicia",
+      "number": "93939-449945",
+      "id": 3
     }
   ]
 }
