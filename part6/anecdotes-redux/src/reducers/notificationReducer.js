@@ -1,18 +1,27 @@
-  export const createAnecdote = (content) => {
+  export const showNotification = (content) => {
     return {
-      type: 'NEW_ANECDOTE',
+      type: 'SHOW_MESSAGE',
       data: {
-        content
+        message: content
       }
     }
   }
-  
-  const reducer = (state = null, action) => {
+
+  export const hideNotification = (content) => {
+    return {
+      type: 'HIDE_MESSAGE',
+      data: {
+          message: null
+      }
+    }
+  }  
+
+  const reducer = (state = "", action) => {
     switch (action.type) {
       case 'SHOW_MESSAGE':
-        return state
+        return action.data.message
       case 'HIDE_MESSAGE':
-        return state
+        return ""
       default:
         return state
     }
