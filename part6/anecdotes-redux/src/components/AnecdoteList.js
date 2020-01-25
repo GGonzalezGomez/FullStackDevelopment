@@ -44,7 +44,9 @@ const mapDispatchToProps = {
 }
 
 const filterAnecdotes = ({filter, anecdotes}) => {
-	return anecdotes.filter(anecdote => anecdote.content.includes(filter))
+	return anecdotes.filter(anecdote => {
+		return anecdote.content.includes(filter)
+	})
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(AnecdoteList)
