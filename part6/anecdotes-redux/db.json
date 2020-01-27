@@ -33,7 +33,7 @@
     {
       "content": "This is a test",
       "id": "35627",
-      "votes": 0
+      "votes": 7
     },
     {
       "content": "This is a test 2",
@@ -59,6 +59,11 @@
       "content": "This is a test 6",
       "votes": 0,
       "id": "OdkVQWo"
+    },
+    {
+      "content": "This is a test 8",
+      "votes": 0,
+      "id": "GA90PIf"
     }
   ]
 }

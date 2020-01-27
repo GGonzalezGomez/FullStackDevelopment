@@ -1,9 +1,20 @@
-  export const showNotification = (content) => {
-    return {
-      type: 'SHOW_MESSAGE',
-      data: {
-        message: content
-      }
+  export const showNotification = (content,period) => {
+    return async dispatch => {
+      dispatch({
+        type: 'SHOW_MESSAGE',
+        data: {
+          message: content,
+          period: period
+        }
+      })
+      setTimeout( () => {
+        dispatch({
+          type: 'HIDE_MESSAGE',
+          data: {
+            message: null
+          }
+        })
+      },period*1000)
     }
   }
 
